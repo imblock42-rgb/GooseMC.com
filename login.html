@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>GooseMC | Вход</title>
+    <link rel="stylesheet" href="css/style.css">
+     <link rel="icon" href="img/logo.png">
+</head>
+<body class="login-page">
+    <div class="login-card reveal active">
+        <h2 style="margin-bottom: 10px; font-weight: 900;">Вход в кабинет</h2>
+        <p style="margin-bottom: 30px; font-size: 0.9rem; opacity: 0.6;">Добро пожаловать обратно!</p>
+        <form id="loginForm">
+            <div class="input-group">
+                <label>Имя пользователя</label>
+                <input type="text" id="username" placeholder="Введите ник" required>
+            </div>
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="Ваш email" required>
+            </div>
+            <div class="input-group">
+                <label>Пароль</label>
+                <input type="password" id="password" placeholder="Ваш пароль" required>
+            </div>
+            <button type="submit" class="btn-cabinet" style="width: 100%; border: none; cursor: pointer; font-size: 1rem;">Авторизоваться</button>
+        </form>
+        <div style="margin-top: 25px; text-align: center;">
+            <a href="index.html" style="font-size: 0.8rem; opacity: 0.5; text-decoration: none;">Вернуться на главную</a>
+        </div>
+    </div>
+    
+    <div id="cabinet" style="display: none;" class="cabinet-container">
+        <!-- Navbar -->
+        <nav class="navbar cabinet-navbar">
+            <div class="container nav-content">
+                <div class="logo">
+                    <img src="assets/img/logo.png" alt="GooseMC Logo" class="nav-logo-img">
+                    Goose<span>MC</span>
+                </div>
+                <div class="menu">
+                    <a href="index.html">Главная</a>
+                    <a href="#" class="active">Кабинет</a>
+                    <a href="rules.html">Правила</a>
+                    <a href="wiki.html">Вики</a>
+                    <a href="shop.html">Магазин</a>
+                </div>
+                <div class="header-icons">
+                    <span onclick="toggleTheme()" style="cursor: pointer; font-size: 1.3rem;">🌙</span>
+                    <button class="btn-logout" onclick="logout()">Выход</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="cabinet-content">
+            <!-- Левая панель профиля -->
+            <aside class="cabinet-sidebar">
+                <div class="profile-card">
+                    <div class="avatar-container">
+                        <img src="assets/img/default-avatar.png" alt="Avatar" class="avatar-large" id="playerAvatar">
+                        <label class="avatar-upload">
+                            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                            <span class="upload-icon">📷</span>
+                        </label>
+                    </div>
+                    <h2 id="playerNick" class="player-nick">Ник игрока</h2>
+                    <div class="balance-card">
+                        <span class="balance-label">Баланс</span>
+                        <span class="balance-value" id="playerBalance">0 ₽</span>
+                    </div>
+                    <div class="player-stats">
+                        <div class="stat">
+                            <span class="stat-label">ID</span>
+                            <span class="stat-value" id="playerId">-</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-label">Email</span>
+                            <span class="stat-value" id="playerEmail">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-section">
+                    <h3> Инструкция</h3>
+                    <div class="video-player">
+                        <div class="play-icon">▶</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Основное содержимое -->
+            <main class="cabinet-main">
+                <!-- Вкладки -->
+                <div class="tabs-desktop">
+                    <button class="tab-btn active" onclick="switchTab('overview', this)">
+                        <span class="tab-icon"></span> Обзор
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('appearance', this)">
+                        <span class="tab-icon"></span> Внешний вид
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('settings', this)">
+                        <span class="tab-icon"></span> Настройки
+                    </button>
+                </div>
+
+                <!-- Содержимое вкладок -->
+                <div class="tab-content-desktop">
+                    <div id="overview" class="tab-pane active">
+                        <h2>Обзор аккаунта</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">ID аккаунта</span>
+                                <span class="info-value" id="playerId2">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Дата регистрации</span>
+                                <span class="info-value" id="playerJoinDate">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Email</span>
+                                <span class="info-value" id="playerEmail2">-</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Статус</span>
+                                <span class="info-value status-online"> Онлайн</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="appearance" class="tab-pane">
+                        <h2>Внешний вид</h2>
+                        <div class="appearance-section">
+                            <div class="skin-upload">
+                                <h3>Скин персонажа</h3>
+                                <div class="upload-box">
+                                    <input type="file" id="skinUpload" accept=".png" style="display: none;">
+                                    <button class="btn-upload" onclick="document.getElementById('skinUpload').click()">
+                                        <span></span> Загрузить скин
+                                    </button>
+                                    <p>Формат: .png (64x64 или 64x32)</p>
+                                </div>
+                            </div>
+                            <div class="cape-upload">
+                                <h3>Плащ</h3>
+                                <div class="upload-box">
+                                    <input type="file" id="capeUpload" accept=".png" style="display: none;">
+                                    <button class="btn-upload" onclick="document.getElementById('capeUpload').click()">
+                                        <span></span> Загрузить плащ
+                                    </button>
+                                    <p>Формат: .png (64x32)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="settings" class="tab-pane">
+                        <h2>Настройки</h2>
+                        <div class="settings-section">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Пароль</h3>
+                                    <p>Измените пароль вашего аккаунта</p>
+                                </div>
+                                <button class="btn-action">Изменить</button>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h3>Двухфакторная аутентификация</h3>
+                                    <p>Усильте безопасность вашего аккаунта</p>
+                                </div>
+                                <button class="btn-action">Включить</button>
+                            </div>
+                            <div class="setting-item danger">
+                                <div class="setting-info">
+                                    <h3>Удалить аккаунт</h3>
+                                    <p>Это действие необратимо</p>
+                                </div>
+                                <button class="btn-action danger">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch">
+            <input type="checkbox" id="checkbox" onclick="toggleTheme()" />
+            <div class="slider"></div>
+        </label>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+</html>

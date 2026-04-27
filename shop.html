@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GooseMC | Магазин</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+     <link rel="icon" href="img/logo.png">
+    <style>
+        .shop-page {
+            min-height: 100vh;
+            padding: 40px 0;
+        }
+
+        .shop-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+        }
+
+        .shop-header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--accent), #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .shop-header p {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .shop-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .shop-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 30px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .info-icon {
+            font-size: 0.8em;
+            opacity: 0.7;
+            cursor: help;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .shop-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(52, 152, 219, 0.1);
+        }
+
+        .shop-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(52, 152, 219, 0.2);
+        }
+
+        .item-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-image img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .item-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .item-content {
+            padding: 20px;
+        }
+
+        .item-name {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .item-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .item-price .tokens {
+            color: #2ecc71;
+        }
+
+        .item-price .currency {
+            color: #f39c12;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .buy-btn:hover {
+            background: #2980b9;
+            transform: scale(1.02);
+        }
+
+        .apply-btn {
+            width: 100%;
+            padding: 12px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .apply-btn:hover {
+            background: #229954;
+        }
+
+        .used-badge {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+
+        .bottom-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 12px;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn.preview {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--accent);
+        }
+
+        .control-btn.preview:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .control-btn.mute {
+            background: rgba(100, 100, 100, 0.3);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .control-btn.cancel {
+            background: rgba(230, 230, 230, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .control-btn.confirm {
+            background: #27ae60;
+            color: white;
+        }
+
+        .control-btn.confirm:hover {
+            background: #229954;
+        }
+
+        .preview-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+
+        .theme-switch-wrapper {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: .4s;
+            width: 26px;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(52, 152, 219, 0.1);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5em;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .nav-logo-img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .menu {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .menu a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            color: var(--accent);
+        }
+
+        .btn-cabinet {
+            background: var(--accent);
+            padding: 8px 20px;
+            border-radius: 6px;
+            color: white !important;
+        }
+
+        .btn-cabinet:hover {
+            background: #2980b9;
+        }
+
+        @media (max-width: 768px) {
+            .shop-header h1 {
+                font-size: 2em;
+            }
+
+            .shop-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+            }
+
+            .menu {
+                flex-direction: column;
+                gap: 10px;
+                font-size: 0.9em;
+            }
+
+            .bottom-controls {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo">
+                <img src="assets/img/logo.png" alt="GooseMC Logo" class="nav-logo-img">
+                Goose<span>MC</span>
+            </div>
+            <div class="menu">
+                <a href="index.html">Главная</a>
+                <a href="login.html" class="btn-cabinet">Кабинет</a>
+                <a href="rules.html">Правила</a>
+                <a href="wiki.html">Вики</a>
+                <a href="shop.html" class="active">Магазин</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="shop-page">
+        <div class="container">
+            <div class="shop-header">
+                <h1>МАГАЗИН ПРЕДМЕТОВ</h1>
+                <p>Улучши свой опыт игры с уникальными предметами</p>
+            </div>
+
+            <div class="shop-container">
+                <!-- ГАДЖЕТЫ -->
+                <div class="shop-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-gift"></i> Гаджеты
+                    </h2>
+                    <div class="shop-grid">
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);">
+                                <img src="assets/icons/standard-gadget.png" alt="Стандартная">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Стандартная</div>
+                                <div class="item-price">
+                                    <span class="tokens">0 токенов</span>
+                                </div>
+                                <div class="used-badge">✓ Применено</div>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #8b0000 0%, #dc143c 100%);">
+                                <img src="assets/icons/direct-apple.png" alt="Прямое яблоко">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Прямое яблоко</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #8b4513 0%, #d2691e 100%);">
+                                <img src="assets/icons/peach-dream.png" alt="Персиковая мечта">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Персиковая мечта</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #00a86b 0%, #32cd32 100%);">
+                                <img src="assets/icons/uranium-stick.png" alt="Уранованная палочка">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Уранованная палочка</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ЗНАЧКИ -->
+                <div class="shop-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-star"></i> Значки
+                    </h2>
+                    <div class="shop-grid">
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #006400 0%, #228b22 100%);">
+                                <img src="assets/icons/sprout.png" alt="Проросток">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Проросток</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 400 токенов</span>
+                                    <span class="currency">€4.5</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #000080 0%, #4169e1 100%);">
+                                <img src="assets/icons/internet.png" alt="Интернет">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Интернет</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 400 токенов</span>
+                                    <span class="currency">€4.5</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #008080 0%, #20b2aa 100%);">
+                                <img src="assets/icons/diamond.png" alt="Бриллиант">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Бриллиант</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 400 токенов</span>
+                                    <span class="currency">€4.5</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #8b0000 0%, #dc143c 100%);">
+                                <img src="assets/icons/wrath.png" alt="Гнев">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Гнев</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #8b7355 0%, #d4a373 100%);">
+                                <img src="assets/icons/tomorrow-three.png" alt="Завтра в три">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Завтра в три</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #003d7a 0%, #0066cc 100%);">
+                                <img src="assets/icons/anchor.png" alt="Якорь">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Якорь</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ФРУКТЫ И ЯГОДЫ -->
+                <div class="shop-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-apple-alt"></i> Фрукты и ягоды
+                    </h2>
+                    <div class="shop-grid">
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);">
+                                <img src="assets/icons/mango.png" alt="Манго">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Манго</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #00aa44 0%, #aa00ff 100%);">
+                                <img src="assets/icons/mint-sakura.png" alt="Мятная сакура">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Мятная сакура</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #00aa00 0%, #aa0000 100%);">
+                                <img src="assets/icons/forest-berries.png" alt="Лесные ягоды">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Лесные ягоды</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #aa00ff 0%, #00aaff 100%);">
+                                <img src="assets/icons/purple-sunset.png" alt="Лиловый закат">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Лиловый закат</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #00aa88 0%, #aa0000 100%);">
+                                <img src="assets/icons/peacock-tail.png" alt="Павлиний хвост">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Павлиний хвост</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #00aa44 0%, #aa0000 100%);">
+                                <img src="assets/icons/magical-dust.png" alt="Сказочная пыль">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Сказочная пыль</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ЧУВСТВА -->
+                <div class="shop-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-heart"></i> Чувства и атмосфера
+                    </h2>
+                    <div class="shop-grid">
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #cccccc 0%, #888888 100%);">
+                                <img src="assets/icons/serenity.png" alt="Безмятежность">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Безмятежность</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #aa8844 0%, #aaaa00 100%);">
+                                <img src="assets/icons/pastel-landscape.png" alt="Пастельный пейзаж">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Пастельный пейзаж</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #aa8800 0%, #ffaa00 100%);">
+                                <img src="assets/icons/sunny-sorbet.png" alt="Солнечный сорбет">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Солнечный сорбет</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #00aa44 0%, #aa0000 100%);">
+                                <img src="assets/icons/rising-spring.png" alt="Восходящая весна">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Восходящая весна</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ЭКСКЛЮЗИВНЫЕ -->
+                <div class="shop-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-crown"></i> Эксклюзивные
+                        <span class="info-icon" title="Ограниченное предложение">ℹ️</span>
+                    </h2>
+                    <div class="shop-grid">
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #00aa00 0%, #00aa00 100%);">
+                                <img src="assets/icons/exclusive-sprite.png" alt="Эксклюзивный спрайт">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Эксклюзивный спрайт</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+
+                        <div class="shop-item">
+                            <div class="item-image" style="background: linear-gradient(135deg, #aa8800 0%, #008844 100%);">
+                                <img src="assets/icons/edge-city.png" alt="Город Края">
+                            </div>
+                            <div class="item-content">
+                                <div class="item-name">Город Края</div>
+                                <div class="item-price">
+                                    <span class="tokens">+ 500 токенов</span>
+                                    <span class="currency">€6</span>
+                                </div>
+                                <button class="buy-btn">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-controls">
+                <button class="control-btn preview" title="Предпросмотр">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <span class="preview-label">Предпросмотр</span>
+                <button class="control-btn cancel" title="Назад">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="control-btn mute" title="Звук отключен">
+                    <i class="fas fa-volume-mute"></i>
+                </button>
+                <button class="control-btn confirm" title="Подтвердить">
+                    <i class="fas fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch">
+            <input type="checkbox" id="checkbox" onclick="toggleTheme()" />
+            <div class="slider"></div>
+        </label>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
